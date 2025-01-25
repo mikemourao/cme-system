@@ -1,40 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const UserForm = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:8000/users/").then((response) => {
+      setUsers(response.data);
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await axios.post("http://localhost:8000/users/", { name, role });
-      alert("Usuário cadastrado com sucesso!");
-      setName("");
-      setRole("");
-    } catch (error) {
-      console.error("Erro ao cadastrar usuário:", error);
-    }
+    await axios.post("http://localhost:8000/users/", { name, role });
+    setName("");
+    setRole("");
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Nome"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-      <input
-        type="text"
-        placeholder="Cargo"
-        value={role}
-        onChange={(e) => setRole(e.target.value)}
-        required
-      />
-      <button type="submit">Cadastrar</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome" />
+        <input value={role} onChange={(e) => setRole(e.target.value)} placeholder="Função" />
+        <button type="submit">Cadastrar</button>
+      </form>
+      <ul>
+        {users.map((user) => (
+          <li key={user.id}>{user.name} - {user.role}</li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
