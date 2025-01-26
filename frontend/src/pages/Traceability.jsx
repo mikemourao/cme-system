@@ -111,7 +111,7 @@ const Traceability = () => {
       { header: "Serial", dataKey: "Serial" },
       { header: "Etapa", dataKey: "Etapa" },
       { header: "Falhas", dataKey: "Falhas" },
-      { header: "Total", dataKey: "Total" },
+      { header: "Vezes no Mesmo Posto", dataKey: "Total" },
       { header: "Data", dataKey: "Data" },
     ];
 
@@ -142,7 +142,7 @@ const Traceability = () => {
       Serial: item.serial,
       Etapa: item.stage,
       Falhas: item.failures || "Nenhuma",
-      Total: totals[`${item.serial}-${item.stage}`],
+      Vezes_no_Mesmo_Posto: totals[`${item.serial}-${item.stage}`],
       Data: new Date(item.timestamp).toLocaleString(),
     }));
 
@@ -235,7 +235,7 @@ const Traceability = () => {
               <TableCell>Serial</TableCell>
               <TableCell>Etapa</TableCell>
               <TableCell>Falhas</TableCell>
-              <TableCell>Total</TableCell>
+              <TableCell>Vezes no Mesmo Posto</TableCell>
               <TableCell>Data</TableCell>
             </TableRow>
           </TableHead>
