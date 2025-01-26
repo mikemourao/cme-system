@@ -117,7 +117,6 @@ const App = () => {
           flexGrow: 1,
           bgcolor: "background.default",
           p: 3,
-          marginLeft: 0,
           ml: sidebarOpen ? `${drawerWidthExpanded}px` : `${drawerWidthCollapsed}px`,
           transition: "all 0.3s",
         }}

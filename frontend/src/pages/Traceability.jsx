@@ -154,22 +154,19 @@ const Traceability = () => {
         flexDirection: "column",
         gap: 2,
         alignItems: "stretch",
-        width: "100%",
+        width: "120%",
         padding: 3,
         boxSizing: "border-box",
-      }}
+    }}
     >
       {/* Título */}
       <Typography variant="h4" gutterBottom>
-        Cadastro e Consulta de Rastreabilidade
+       Rastreabilidade
       </Typography>
 
       {/* Formulário de Cadastro */}
       <Card>
         <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Cadastro de Rastreabilidade
-          </Typography>
           <form onSubmit={handleSubmit} style={{ display: "flex", gap: "16px" }}>
             <TextField
               fullWidth
@@ -210,7 +207,7 @@ const Traceability = () => {
               type="submit"
               sx={{ alignSelf: "center" }}
             >
-              Cadastrar
+              SALVAR
             </Button>
           </form>
         </CardContent>
