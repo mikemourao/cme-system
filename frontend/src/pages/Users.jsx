@@ -10,7 +10,7 @@ const Users = () => {
         Gerenciamento de Usuários
       </Typography>
       <UserForm />
-      <UserList />
+      {/* <UserList /> */}
     </Container>
   );
 };
