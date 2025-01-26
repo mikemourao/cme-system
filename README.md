@@ -82,7 +82,7 @@ Este projeto é um sistema completo de gerenciamento para controle de **usuário
     Traceability.jsx: Cadastro e consulta de rastreabilidade.
     
   Cada página utiliza:
-    ```
+  ```
     useState e useEffect para gerenciamento de estado.
     Axios para chamadas à API.
     Material-UI para layout e componentes.
