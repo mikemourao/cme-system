@@ -38,4 +38,58 @@ Este projeto é um sistema completo de gerenciamento para controle de **usuário
 
 cme-system/ ├── backend/ # Código do backend com FastAPI │ ├── app/ │ │ ├── models.py # Modelos do banco de dados │ │ ├── schemas.py # Schemas para validação de dados │ │ ├── database.py # Configuração do banco de dados │ │ └── main.py # Arquivo principal com as rotas ├── frontend/ # Código do frontend com React e Vite │ ├── src/ │ │ ├── App.jsx # Arquivo principal do frontend │ │ ├── components/ # Componentes reutilizáveis │ │ ├── pages/ # Páginas (Usuários, Materiais, Rastreabilidade) │ │ └── styles/ # Estilos adicionais ├── docker-compose.yml # Arquivo de configuração do Docker Compose └── README.md # Documentação do projeto
 
-yaml
+## **⚙️ Pré-requisitos**
+
+Antes de começar, você precisa ter instalado:
+- **Docker** e **Docker Compose**
+- **Git** (para clonar o repositório)
+
+---
+
+## **📦 Como Executar o Projeto**
+
+1. **Clone o Repositório**
+   ```bash
+   git clone https://github.com/usuario/sistema-cme.git
+   cd sistema-cme
+
+2. **Suba o Ambiente com Docker Certifique-se de estar na raiz do projeto e execute:**
+   ```bash
+   docker-compose up --build
+
+3. **Acesse o Sistema**
+    ```
+    Frontend: http://localhost:5173
+    Backend: http://localhost:8000/docs (Swagger para testar as APIs)
+
+## **📋  Documentação de Código**
+
+1. **Backend**
+  As rotas principais estão definidas em main.py:
+  
+  Usuários:
+    POST /users/: Cadastrar usuário.
+    GET /users/: Listar usuários.
+    PUT /users/{id}: Editar usuário.
+    DELETE /users/{id}: Excluir usuário.
+  Materiais:
+    POST /materials/: Cadastrar material.
+    GET /materials/: Listar materiais.
+    PUT /materials/{id}: Editar material.
+    DELETE /materials/{id}: Excluir material.
+  Rastreabilidade:
+    POST /traceability/: Registrar etapa do processo.
+    GET /traceability/: Consultar rastreabilidade (com filtro por serial).
+    Banco de Dados: A configuração está em database.py e utiliza o ORM SQLAlchemy.
+
+1. **Frontend**
+  As páginas principais estão em frontend/src/pages/:
+  
+    Users.jsx: Gerenciamento de usuários.
+    Materials.jsx: Gerenciamento de materiais.
+    Traceability.jsx: Cadastro e consulta de rastreabilidade.
+  Cada página utiliza:
+  
+    useState e useEffect para gerenciamento de estado.
+    Axios para chamadas à API.
+    Material-UI para layout e componentes.
