@@ -77,14 +77,23 @@ Este projeto é um sistema completo de gerenciamento para controle de **usuário
 
 2. **Frontend**
    
-    As páginas principais estão em frontend/src/pages/:
-    ```
-      Users.jsx: Gerenciamento de usuários.
-      Materials.jsx: Gerenciamento de materiais.
-      Traceability.jsx: Cadastro e consulta de rastreabilidade.
+   As páginas principais estão em frontend/src/pages/:
+   
+        Users.jsx: Gerenciamento de usuários.
+        Materials.jsx: Gerenciamento de materiais.
+        Traceability.jsx: Cadastro e consulta de rastreabilidade.
       
   Cada página utiliza:
-  ```
-      useState e useEffect para gerenciamento de estado.
-      Axios para chamadas à API.
-      Material-UI para layout e componentes.
+     
+          useState e useEffect para gerenciamento de estado.
+          Axios para chamadas à API.
+          Material-UI para layout e componentes.
+
+  ---
+
+  ## ** Assista o projeto rodando**
+
+
+https://github.com/user-attachments/assets/bbd2ab33-d8cd-4c5e-bb88-1ad8294d0a1b
+
+
