@@ -74,14 +74,15 @@ Este projeto é um sistema completo de gerenciamento para controle de **usuário
     GET /traceability/: Consultar rastreabilidade (com filtro por serial).
     Banco de Dados: A configuração está em database.py e utiliza o ORM SQLAlchemy.
 
-1. **Frontend**
+2. **Frontend**
   As páginas principais estão em frontend/src/pages/:
     ```
     Users.jsx: Gerenciamento de usuários.
     Materials.jsx: Gerenciamento de materiais.
     Traceability.jsx: Cadastro e consulta de rastreabilidade.
+    
   Cada página utiliza:
-  ```
+    ```
     useState e useEffect para gerenciamento de estado.
     Axios para chamadas à API.
     Material-UI para layout e componentes.
