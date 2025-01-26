@@ -17,7 +17,6 @@ import {
   IconButton,
   Popover,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
@@ -33,125 +32,115 @@ const modalStyle = {
   borderRadius: "8px",
 };
 
-const Users = () => {
-  const [users, setUsers] = useState([]); // Lista de usuários
+const Materials = () => {
+  const [materials, setMaterials] = useState([]); // Lista de materiais
   const [open, setOpen] = useState(false); // Controle do modal
-  const [name, setName] = useState(""); // Nome do usuário
-  const [role, setRole] = useState(""); // Função do usuário
-  const [editingUser, setEditingUser] = useState(null); // Usuário sendo editado
-  const [openSnackbar, setOpenSnackbar] = useState(false); // Controle do Snackbar
+  const [name, setName] = useState(""); // Nome do material
+  const [type, setType] = useState(""); // Tipo do material
+  const [expirationDate, setExpirationDate] = useState(""); // Data de validade
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Controle do Snackbar
   const [snackbarMessage, setSnackbarMessage] = useState(""); // Mensagem do Snackbar
-  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // Tipo do Snackbar
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success"); // Severidade do Snackbar
 
   // Controle do Popover
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedUserId, setSelectedUserId] = useState(null); // Usuário selecionado para exclusão
+  const [selectedMaterialId, setSelectedMaterialId] = useState(null); // Material selecionado para exclusão
 
+  // Buscar lista de materiais ao carregar o componente
   useEffect(() => {
-    fetchUsers();
+    fetchMaterials();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchMaterials = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/users/");
-      setUsers(response.data);
+      const response = await axios.get("http://localhost:8000/materials/");
+      setMaterials(response.data);
     } catch (error) {
-      console.error("Erro ao buscar usuários:", error);
+      console.error("Erro ao buscar materiais:", error);
     }
   };
 
-  const handleOpen = (user = null) => {
-    setEditingUser(user);
-    setName(user ? user.name : "");
-    setRole(user ? user.role : "");
-    setOpen(true);
-  };
-
+  const handleOpen = () => setOpen(true); // Abrir modal
   const handleClose = () => {
-    setOpen(false);
-    setName("");
-    setRole("");
-    setEditingUser(null);
+    setOpen(false); // Fechar o modal
+    setName(""); // Limpar campos do formulário
+    setType("");
+    setExpirationDate("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (editingUser) {
-        await axios.put(`http://localhost:8000/users/${editingUser.id}`, {
-          name,
-          role,
-        });
-        setSnackbarMessage("Usuário atualizado com sucesso!");
-      } else {
-        await axios.post("http://localhost:8000/users/", { name, role });
-        setSnackbarMessage("Usuário cadastrado com sucesso!");
-      }
-
+      await axios.post("http://localhost:8000/materials/", {
+        name,
+        type,
+        expiration_date: expirationDate,
+      });
+      setSnackbarMessage("Material cadastrado com sucesso!");
       setSnackbarSeverity("success");
-      setOpenSnackbar(true);
-      fetchUsers();
-      handleClose();
+      setSnackbarOpen(true);
+      setOpen(false);
+      fetchMaterials(); // Atualizar tabela
     } catch (error) {
-      console.error("Erro ao salvar usuário:", error);
-      setSnackbarMessage(
-        error.response?.data?.detail || "Erro ao salvar usuário."
-      );
+      console.error("Erro ao cadastrar material:", error);
+      setSnackbarMessage("Erro ao cadastrar material.");
       setSnackbarSeverity("error");
-      setOpenSnackbar(true);
+      setSnackbarOpen(true);
     }
   };
 
-  const handleOpenPopover = (event, userId) => {
+  const handleOpenPopover = (event, materialId) => {
     setAnchorEl(event.currentTarget); // Define o botão como âncora
-    setSelectedUserId(userId); // Define o usuário selecionado
+    setSelectedMaterialId(materialId); // Define o material selecionado
   };
 
   const handleClosePopover = () => {
     setAnchorEl(null); // Fecha o popover
-    setSelectedUserId(null); // Limpa o usuário selecionado
+    setSelectedMaterialId(null); // Limpa o material selecionado
   };
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8000/users/${selectedUserId}`);
-      setSnackbarMessage("Usuário excluído com sucesso!");
+      await axios.delete(`http://localhost:8000/materials/${selectedMaterialId}`);
+      setSnackbarMessage("Material excluído com sucesso!");
       setSnackbarSeverity("success");
-      setOpenSnackbar(true);
-      fetchUsers();
-      handleClosePopover(); // Fecha o popover após exclusão
+      setSnackbarOpen(true);
+      fetchMaterials(); // Atualizar tabela
+      handleClosePopover(); // Fecha o popover
     } catch (error) {
-      console.error("Erro ao excluir usuário:", error);
-      setSnackbarMessage("Erro ao excluir usuário.");
+      console.error("Erro ao excluir material:", error);
+      setSnackbarMessage("Erro ao excluir material.");
       setSnackbarSeverity("error");
-      setOpenSnackbar(true);
+      setSnackbarOpen(true);
     }
   };
 
-  const handleCloseSnackbar = () => setOpenSnackbar(false);
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false); // Fechar Snackbar
+  };
 
   return (
     <Box p={3}>
       {/* Título */}
       <Typography variant="h4" gutterBottom>
-        Gerenciamento de Usuários
+        Cadastro de Materiais
       </Typography>
 
       {/* Botão para abrir o formulário */}
-      <Button variant="contained" color="primary" onClick={() => handleOpen()}>
-        Cadastrar Usuário
+      <Button variant="contained" color="primary" onClick={handleOpen}>
+        Cadastrar Material
       </Button>
 
       {/* Modal do formulário */}
       <Modal open={open} onClose={handleClose}>
         <Box sx={modalStyle}>
           <Typography variant="h6" gutterBottom>
-            {editingUser ? "Editar Usuário" : "Cadastrar Usuário"}
+            Cadastro de Material
           </Typography>
           <form onSubmit={handleSubmit}>
             <TextField
               fullWidth
-              label="Nome"
+              label="Nome do Material"
               value={name}
               onChange={(e) => setName(e.target.value)}
               margin="normal"
@@ -159,21 +148,24 @@ const Users = () => {
             />
             <TextField
               fullWidth
-              label="Função"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
+              label="Tipo do Material"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
               margin="normal"
               required
-              select
-              SelectProps={{
-                native: true,
+            />
+            <TextField
+              fullWidth
+              label="Data de Validade"
+              type="date"
+              value={expirationDate}
+              onChange={(e) => setExpirationDate(e.target.value)}
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
               }}
-            >
-              <option value=""></option>
-              <option value="Técnico">Técnico</option>
-              <option value="Enfermagem">Enfermagem</option>
-              <option value="Administrativo">Administrativo</option>
-            </TextField>
+              required
+            />
             <Box textAlign="right" mt={2}>
               <Button
                 variant="contained"
@@ -181,7 +173,7 @@ const Users = () => {
                 type="submit"
                 sx={{ marginRight: 1 }}
               >
-                Salvar
+                Cadastrar
               </Button>
               <Button variant="outlined" onClick={handleClose}>
                 Cancelar
@@ -191,39 +183,37 @@ const Users = () => {
         </Box>
       </Modal>
 
-      {/* Tabela de Usuários */}
-      <TableContainer
-        component={Paper}
-        sx={{ height: "450px", overflow: "auto", marginTop: 3 }}
-      >
+      {/* Tabela de Materiais */}
+      <TableContainer component={Paper} sx={{ height: "450px", overflow: "auto", marginTop: 3 }}>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
               <TableCell>Nome</TableCell>
-              <TableCell>Função</TableCell>
+              <TableCell>Tipo</TableCell>
+              <TableCell>Data de Validade</TableCell>
+              <TableCell>Serial</TableCell>
               <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.id}</TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.role}</TableCell>
+            {materials.map((material) => (
+              <TableRow key={material.id}>
+                <TableCell>{material.id}</TableCell>
+                <TableCell>{material.name}</TableCell>
+                <TableCell>{material.type}</TableCell>
+                <TableCell>{material.expiration_date}</TableCell>
+                <TableCell>{material.serial}</TableCell>
                 <TableCell>
-                  <IconButton color="primary" onClick={() => handleOpen(user)}>
-                    <EditIcon />
-                  </IconButton>
                   <IconButton
                     color="secondary"
-                    onClick={(e) => handleOpenPopover(e, user.id)}
+                    onClick={(e) => handleOpenPopover(e, material.id)}
                   >
                     <DeleteIcon />
                   </IconButton>
                   {/* Popover de confirmação */}
                   <Popover
-                    open={Boolean(anchorEl) && selectedUserId === user.id}
+                    open={Boolean(anchorEl) && selectedMaterialId === material.id}
                     anchorEl={anchorEl}
                     onClose={handleClosePopover}
                     anchorOrigin={{
@@ -237,7 +227,7 @@ const Users = () => {
                   >
                     <Box p={2}>
                       <Typography variant="body1" gutterBottom>
-                        Deseja realmente excluir?
+                        Deseja realmente excluir este material?
                       </Typography>
                       <Button
                         variant="contained"
@@ -247,10 +237,7 @@ const Users = () => {
                       >
                         Excluir
                       </Button>
-                      <Button
-                        variant="outlined"
-                        onClick={handleClosePopover}
-                      >
+                      <Button variant="outlined" onClick={handleClosePopover}>
                         Cancelar
                       </Button>
                     </Box>
@@ -264,12 +251,16 @@ const Users = () => {
 
       {/* Snackbar */}
       <Snackbar
-        open={openSnackbar}
+        open={snackbarOpen}
         autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
+        onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbarSeverity}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarSeverity}
+          sx={{ width: "100%" }}
+        >
           {snackbarMessage}
         </Alert>
       </Snackbar>
@@ -277,4 +268,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Materials;

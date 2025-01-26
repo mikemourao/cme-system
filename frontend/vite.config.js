@@ -4,11 +4,7 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      "/users": {
-        target: "http://localhost:8000",
-        changeOrigin: true,
-      },
-    },
+    open: true, // Abre o navegador automaticamente
+    host: true, // Permite acesso externo (opcional)
   },
 });
