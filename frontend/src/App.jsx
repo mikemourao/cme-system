@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import UserForm from "./pages/Users";
 import MaterialForm from "./pages/Materials";
-import TraceabilityForm from "./components/TraceabilityForm ";
+import TraceabilityForm from "./pages/Traceability";
 import {
   Box,
   CssBaseline,
