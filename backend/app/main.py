@@ -1,9 +1,19 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware  # Importando o CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import Optional  # Adicionando a importação de Optional
 from app import models, schemas, database
 
 app = FastAPI()
+
+# Configuração do CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite todas as origens. Você pode especificar "http://localhost:5173" se preferir restringir
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos os métodos (GET, POST, etc.)
+    allow_headers=["*"],  # Permite todos os cabeçalhos
+)
 
 models.Base.metadata.create_all(bind=database.engine)
 
