@@ -66,7 +66,6 @@ Este projeto é um sistema completo de gerenciamento para controle de **usuário
   
     POST /materials/: Cadastrar material.
     GET /materials/: Listar materiais.
-    PUT /materials/{id}: Editar material.
     DELETE /materials/{id}: Excluir material.
     
   Rastreabilidade:
