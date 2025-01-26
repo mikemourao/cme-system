@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import UserForm from "./pages/Users";
 import MaterialForm from "./pages/Materials";
 import TraceabilityForm from "./pages/Traceability";
+import Home from "./pages/Home";
 import {
   Box,
   CssBaseline,
@@ -111,6 +112,7 @@ const App = () => {
       >
         <Toolbar />
         <Routes>
+          <Route path="/" element={<Home />} />
           <Route path="/users" element={<UserForm />} />
           <Route path="/materials" element={<MaterialForm />} />
           <Route path="/traceability" element={<TraceabilityForm />} />
