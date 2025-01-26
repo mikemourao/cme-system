@@ -12,6 +12,8 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
 
@@ -21,7 +23,7 @@ const modalStyle = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width:  "120%",
+  width: "50%",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -34,6 +36,7 @@ const Materials = () => {
   const [name, setName] = useState(""); // Nome do material
   const [type, setType] = useState(""); // Tipo do material
   const [expirationDate, setExpirationDate] = useState(""); // Data de validade
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Controle do Snackbar
 
   // Buscar lista de materiais ao carregar o componente
   useEffect(() => {
@@ -50,7 +53,12 @@ const Materials = () => {
   };
 
   const handleOpen = () => setOpen(true); // Abrir modal
-  const handleClose = () => setOpen(false); // Fechar modal
+  const handleClose = () => {
+    setOpen(false); // Fechar o modal
+    setName(""); // Limpar o campo de nome do material
+    setType(""); // Limpar o campo de tipo do material
+    setExpirationDate(""); // Limpar o campo de data de validade
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,15 +68,19 @@ const Materials = () => {
         type,
         expiration_date: expirationDate,
       });
-      alert("Material cadastrado com sucesso!");
       setName("");
       setType("");
       setExpirationDate("");
       setOpen(false);
       fetchMaterials(); // Atualizar a tabela
+      setSnackbarOpen(true); // Abrir Snackbar
     } catch (error) {
       console.error("Erro ao cadastrar material:", error);
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false); // Fechar Snackbar
   };
 
   return (
@@ -136,7 +148,7 @@ const Materials = () => {
       </Modal>
 
       {/* Tabela de Materiais */}
-      <TableContainer component={Paper} sx={{ marginTop: 3 }}>
+      <TableContainer component={Paper} sx={{ height: "450px", overflow: "auto", marginTop: 3 }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -160,6 +172,18 @@ const Materials = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Snackbar de Sucesso */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success" sx={{ width: "100%" }}>
+          Material cadastrado com sucesso!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

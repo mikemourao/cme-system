@@ -12,16 +12,18 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
 
 // Estilos do Modal
 const modalStyle = {
-  position: "left",
+  position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "120%",
+  width: "50%",
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 4,
@@ -33,6 +35,7 @@ const Users = () => {
   const [open, setOpen] = useState(false); // Controle do modal
   const [name, setName] = useState(""); // Nome do novo usuário
   const [role, setRole] = useState(""); // Função do novo usuário
+  const [openSnackbar, setOpenSnackbar] = useState(false); // Controle do Snackbar
 
   // Buscar lista de usuários ao carregar o componente
   useEffect(() => {
@@ -49,21 +52,30 @@ const Users = () => {
   };
 
   const handleOpen = () => setOpen(true); // Abrir modal
-  const handleClose = () => setOpen(false); // Fechar modal
+  const handleClose = () => {
+    setOpen(false); // Fechar o modal
+    setName(""); // Limpar o campo de nome
+    setRole(""); // Limpar o campo de função
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.post("http://localhost:8000/users/", { name, role });
-      alert("Usuário cadastrado com sucesso!");
       setName("");
       setRole("");
       setOpen(false);
       fetchUsers(); // Atualizar a tabela
+
+      // Exibir a mensagem de sucesso
+      setOpenSnackbar(true);
     } catch (error) {
       console.error("Erro ao cadastrar usuário:", error);
     }
   };
+
+  // Fechar o Snackbar após 3 segundos
+  const handleCloseSnackbar = () => setOpenSnackbar(false);
 
   return (
     <Box p={3}>
@@ -104,7 +116,7 @@ const Users = () => {
                 native: true,
               }}
             >
-              <option value="">Selecione a Função</option>
+              <option value=""></option>
               <option value="Técnico">Técnico</option>
               <option value="Enfermagem">Enfermagem</option>
               <option value="Administrativo">Administrativo</option>
@@ -127,7 +139,7 @@ const Users = () => {
       </Modal>
 
       {/* Tabela de Usuários */}
-      <TableContainer component={Paper} sx={{ marginTop: 3 }}>
+      <TableContainer component={Paper} sx={{ height: "450px", overflow: "auto", marginTop: 3 }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -147,6 +159,18 @@ const Users = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Snackbar de sucesso */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success">
+          Usuário cadastrado com sucesso!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

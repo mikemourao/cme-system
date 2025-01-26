@@ -70,3 +70,27 @@ button:focus-visible {
 .MuiBox-root.css-1jwory6 {
   margin-left: 0 !important;
 }
+
+.css-b7dj7n-MuiList-root {
+  padding: 12px !important;
+  overflow: hidden !important;
+}
+
+.css-1lwhjos-MuiPaper-root-MuiDrawer-paper {
+  background-color: #1976d205 !important;
+}
+
+.css-rizt0-MuiTypography-root {
+  font-weight: 600 !important;
+  color: #696B6F !important;
+}
+
+.css-1jxw05q-MuiTableCell-root {
+  color: white !important;
+  background-color: #1976D2 !important;
+}
+
+.css-1orzuox-MuiTableCell-root{
+  color: white !important;
+  background-color: #1976D2 !important;
+}

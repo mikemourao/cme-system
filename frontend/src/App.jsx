@@ -11,8 +11,13 @@ import {
   Toolbar,
   AppBar,
   Typography,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
 } from "@mui/material";
-import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon } from "@mui/icons-material";
+import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, Person as PersonIcon, Inventory as InventoryIcon, Timeline as TimelineIcon } from "@mui/icons-material";
 
 const drawerWidthExpanded = 240; // Largura expandida do sidebar
 const drawerWidthCollapsed = 80; // Largura retraída do sidebar
@@ -58,55 +63,38 @@ const App = () => {
           },
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <IconButton onClick={toggleSidebar}>
             {sidebarOpen ? <ChevronLeftIcon /> : <MenuIcon />}
           </IconButton>
         </Toolbar>
-        <Box sx={{ overflow: "auto" }}>
-          <nav>
-            <ul style={{ listStyleType: "none", padding: 0 }}>
-              <li>
-                <Link
-                  to="/users"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                    padding: sidebarOpen ? "10px 20px" : "10px",
-                    display: "block",
-                  }}
-                >
-                  Gerenciamento de Usuários
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/materials"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                    padding: sidebarOpen ? "10px 20px" : "10px",
-                    display: "block",
-                  }}
-                >
-                  Cadastro de Materiais
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/traceability"
-                  style={{
-                    textDecoration: "none",
-                    color: "black",
-                    padding: sidebarOpen ? "10px 20px" : "10px",
-                    display: "block",
-                  }}
-                >
-                  Rastreabilidade
-                </Link>
-              </li>
-            </ul>
-          </nav>
+        <Box sx={{ overflow: "auto", display: "flex", flexDirection: "column" }}>
+          <List>
+            <ListItem button component={Link} to="/users">
+              <Tooltip title="Gerenciamento de Usuários" arrow>
+                <ListItemIcon>
+                  <PersonIcon />
+                </ListItemIcon>
+              </Tooltip>
+              {sidebarOpen && <ListItemText primary="Gerenciamento de Usuários" />}
+            </ListItem>
+            <ListItem button component={Link} to="/materials">
+              <Tooltip title="Cadastro de Materiais" arrow>
+                <ListItemIcon>
+                  <InventoryIcon />
+                </ListItemIcon>
+              </Tooltip>
+              {sidebarOpen && <ListItemText primary="Cadastro de Materiais" />}
+            </ListItem>
+            <ListItem button component={Link} to="/traceability">
+              <Tooltip title="Rastreabilidade" arrow>
+                <ListItemIcon>
+                  <TimelineIcon />
+                </ListItemIcon>
+              </Tooltip>
+              {sidebarOpen && <ListItemText primary="Rastreabilidade" />}
+            </ListItem>
+          </List>
         </Box>
       </Drawer>
 

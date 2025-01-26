@@ -14,6 +14,8 @@ import {
   Card,
   CardContent,
   IconButton,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { jsPDF } from "jspdf";
@@ -27,6 +29,8 @@ const Traceability = () => {
   const [stage, setStage] = useState(""); // Etapa
   const [failures, setFailures] = useState(""); // Falhas
   const [filterSerial, setFilterSerial] = useState(""); // Filtro de número de série
+  const [openSnackbar, setOpenSnackbar] = useState(false); // Controle da exibição do Snackbar
+//   const [snackbarMessage, setSnackbarMessage] = useState(""); // Mensagem do Snackbar
 
   // Buscar lista de rastreabilidade ao carregar o componente
   useEffect(() => {
@@ -52,7 +56,8 @@ const Traceability = () => {
         stage,
         failures,
       });
-      alert("Rastreabilidade cadastrada com sucesso!");
+    //   setSnackbarMessage("Rastreabilidade cadastrada com sucesso!"); // Mensagem de sucesso
+      setOpenSnackbar(true); // Exibir Snackbar
       setSerial("");
       setStage("");
       setFailures("");
@@ -147,22 +152,13 @@ const Traceability = () => {
     XLSX.writeFile(workbook, "rastreabilidade.xlsx");
   };
 
+  // Fechar o Snackbar após 3 segundos
+  const handleCloseSnackbar = () => setOpenSnackbar(false);
+
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-        alignItems: "stretch",
-        width: "120%",
-        padding: 3,
-        boxSizing: "border-box",
-    }}
-    >
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 2, alignItems: "stretch", width: "120%", padding: 3, boxSizing: "border-box" }}>
       {/* Título */}
-      <Typography variant="h4" gutterBottom>
-       Rastreabilidade
-      </Typography>
+      <Typography variant="h4" gutterBottom> Rastreabilidade </Typography>
 
       {/* Formulário de Cadastro */}
       <Card>
@@ -184,9 +180,7 @@ const Traceability = () => {
               margin="normal"
               required
               select
-              SelectProps={{
-                native: true,
-              }}
+              SelectProps={{ native: true }}
             >
               <option value=""></option>
               <option value="Recebimento">Recebimento</option>
@@ -201,12 +195,7 @@ const Traceability = () => {
               onChange={(e) => setFailures(e.target.value)}
               margin="normal"
             />
-            <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              sx={{ alignSelf: "center" }}
-            >
+            <Button variant="contained" color="primary" type="submit" sx={{ alignSelf: "center" }}>
               SALVAR
             </Button>
           </form>
@@ -228,36 +217,25 @@ const Traceability = () => {
             ),
           }}
         />
-        <Button variant="contained" color="primary" onClick={handleFilter}>
-          Filtrar
-        </Button>
+        <Button variant="contained" color="primary" onClick={handleFilter}>Filtrar</Button>
       </Box>
 
       {/* Botões de Exportação */}
       <Box sx={{ display: "flex", gap: 2 }}>
-        <Button variant="contained" color="secondary" onClick={exportToPDF}>
-          Exportar PDF
-        </Button>
-        <Button variant="contained" color="secondary" onClick={exportToXLSX}>
-          Exportar XLSX
-        </Button>
+        <Button variant="contained" color="secondary" onClick={exportToPDF}>Exportar PDF</Button>
+        <Button variant="contained" color="secondary" onClick={exportToXLSX}>Exportar XLSX</Button>
       </Box>
 
       {/* Tabela de Rastreabilidade */}
-      <TableContainer
-        component={Paper}
-        sx={{
-          height: "250px",
-          overflow: "auto", // Adiciona barra de rolagem
-        }}
-      >
+      <TableContainer component={Paper} sx={{ height: "250px", overflow: "auto" }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>ID</TableCell>
-              <TableCell>Número de Série</TableCell>
+              <TableCell>Serial</TableCell>
               <TableCell>Etapa</TableCell>
               <TableCell>Falhas</TableCell>
+              <TableCell>Total</TableCell>
               <TableCell>Data</TableCell>
             </TableRow>
           </TableHead>
@@ -268,14 +246,25 @@ const Traceability = () => {
                 <TableCell>{item.serial}</TableCell>
                 <TableCell>{item.stage}</TableCell>
                 <TableCell>{item.failures || "Nenhuma"}</TableCell>
-                <TableCell>
-                  {new Date(item.timestamp).toLocaleString()}
-                </TableCell>
+                <TableCell>{calculateTotals()[`${item.serial}-${item.stage}`]}</TableCell>
+                <TableCell>{new Date(item.timestamp).toLocaleString()}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Snackbar de Sucesso */}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={openSnackbar}
+        autoHideDuration={3000} // Tempo de exibição
+        onClose={() => setOpenSnackbar(false)}
+      >
+         <Alert onClose={handleCloseSnackbar} severity="success">
+            Serial registrado com sucesso!
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
